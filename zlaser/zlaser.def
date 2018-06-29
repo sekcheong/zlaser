@@ -1,0 +1,12 @@
+LIBRARY polarizer_dll
+DESCRIPTION "Routine for driving THORLABS K10CR1 polarizer"
+EXPORTS
+	tl_device_print_list @1
+	tl_device_open @2
+	tl_device_close @3
+	tl_device_send_command @4
+	tl_device_send_command_ex @5
+	tl_device_send_data @6
+	tl_device_read_response @7
+	tl_device_move_degree @8 
+	tl_device_move_home @9
