@@ -22,6 +22,7 @@ extern "C"
 	DLLEXPORT bool zl_device_close(int device);
 	DLLEXPORT bool zl_device_read(int hComm, char *buff, int size, int &sizeRead);
 	DLLEXPORT bool zl_device_write(int hComm, char *buff, int size, int &sizeWritten);
+	DLLEXPORT bool zl_device_convert_buffer(unsigned char *buff, int size);
 	DLLEXPORT bool zl_device_reset(int hComm);
 	DLLEXPORT bool zl_device_test(int hComm);
 	DLLEXPORT bool zl_device_set(int hComm, char *ledName, int state);
