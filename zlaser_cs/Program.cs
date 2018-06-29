@@ -9,13 +9,46 @@ namespace zlaser_cs
 {
 	class Program
 	{
-		[DllImport("zlaser.dll")]
-		static extern bool zl_device_open(string port, ref int hComm);		
+		[DllImport("zlaser.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool zl_device_open(string port, ref int hComm);
+
+		[DllImport("zlaser.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool zl_device_close(int hComm);
+
+		[DllImport("zlaser.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool zl_device_read(int hComm, StringBuilder buff, int maxlen, ref int sizeRead);
+
+		[DllImport("zlaser.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool zl_device_convert_buffer(IntPtr inputBuffer, int size);
 
 		static void Main(string[] args)
 		{
 			int comm = 0;
+
+			//shows how to pass int by reference back to C# from dll
 			zl_device_open("1234", ref comm);
+			StringBuilder sb = new StringBuilder(100);
+			int len = 0;
+
+			//shows how to pass string back to C# from dll
+			zl_device_read(comm, sb, sb.Capacity, ref len);			
+			Console.WriteLine(sb.ToString());
+
+			//shows how to pass C# array to C dll
+			byte[] imageData = new byte[100];
+
+			GCHandle handle;
+			handle = GCHandle.Alloc(imageData, GCHandleType.Pinned);
+			IntPtr outBuffer = handle.AddrOfPinnedObject();
+			zl_device_convert_buffer(outBuffer, imageData.Length);							
+			handle.Free();
+
+			Console.WriteLine("First 10 bytes of imageData[]");
+			for (int i = 0; i < 10; i++) {
+				Console.Write(imageData[i] + " ");
+			}
+
+			zl_device_close(comm);
 		}
 	}
 }
